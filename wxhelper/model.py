@@ -4,6 +4,25 @@ from typing import List
 
 
 @dataclass
+class Event:
+    """消息事件"""
+    content: typing.Optional[typing.Any] = None
+    fromGroup: typing.Optional[str] = None
+    fromUser: typing.Optional[str] = None
+    isSendByPhone: typing.Optional[int] = None
+    isSendMsg: typing.Optional[int] = None
+    msgId: typing.Optional[int] = None
+    path: typing.Optional[str] = None
+    thumbPath: typing.Optional[str] = None
+    pid: typing.Optional[int] = None
+    sign: typing.Optional[str] = None
+    signature: typing.Optional[str] = None
+    time: typing.Optional[str] = None
+    timestamp: typing.Optional[int] = None
+    type: typing.Optional[int] = None
+
+
+@dataclass
 class Account:
     """用户"""
     account: str
@@ -62,30 +81,6 @@ class RoomMembers:
     admin: str
     chatRoomId: str
     members: str
-
-
-@dataclass
-class Event:
-    """消息事件"""
-    content: typing.Optional[typing.Any] = None
-    base64Img: typing.Optional[str] = None
-    data: typing.Optional[list] = None
-    createTime: typing.Optional[int] = None
-    displayFullContent: typing.Optional[str] = None
-    fromGroup: typing.Optional[str] = None
-    fromUser: typing.Optional[str] = None
-    isSendByPhone: typing.Optional[int] = None
-    isSendMsg: typing.Optional[int] = None
-    msgId: typing.Optional[int] = None
-    path: typing.Optional[str] = None
-    msgSequence: typing.Optional[int] = None
-    pid: typing.Optional[int] = None
-    sign: typing.Optional[str] = None
-    signature: typing.Optional[str] = None
-    toUser: typing.Optional[str] = None
-    time: typing.Optional[str] = None
-    timestamp: typing.Optional[int] = None
-    type: typing.Optional[int] = None
 
 
 @dataclass

@@ -104,6 +104,7 @@ class Bot:
         self.IMAGE_SAVE_PATH = os.path.join(self.WXHELPER_PATH, "image")
         self.VIDEO_SAVE_PATH = os.path.join(self.WXHELPER_PATH, "video")
         self.call_hook_func(self.on_login, bot, event)
+        logger.info(f"login success, {bot.info}")
 
     def set_webhook_url(self, webhook_url: str) -> None:
         self.webhook_url = webhook_url
@@ -201,7 +202,7 @@ class Bot:
         return Response(**self.call_api(params=params, json=data))
 
     def send_file(self, wxid: str, file_path: str) -> Response:
-        """发送图片消息"""
+        """发送文件消息"""
         params = {
             "type": "6"
         }
@@ -211,14 +212,14 @@ class Bot:
         }
         return Response(**self.call_api(params=params, json=data))
 
-    def send_room_at(self, room_id: str, wxids: str, msg: str) -> Response:
+    def send_room_at(self, room_id: str, wxids: list[str], msg: str) -> Response:
         """发送群at消息"""
         params = {
             "type": "3"
         }
         data = {
             "chatRoomId": room_id,
-            "wxids": wxids,
+            "wxids": ",".join(wxids),
             "msg": msg
         }
         return Response(**self.call_api(params=params, json=data))
@@ -302,7 +303,6 @@ class Bot:
             "msgId": msg_id
         }
         return Response(**self.call_api(params=params, json=data))
-
 
     def get_contacts(self) -> typing.List[Contact]:
         """获取好友列表"""
@@ -475,6 +475,18 @@ class Bot:
         }
         return Response(**self.call_api(params=params, json=data))
 
+    def verify_apply(self, v3: str, v4: str, permission: int) -> Response:
+        """验证好友请求"""
+        params = {
+            "type": "23"
+        }
+        data = {
+            "v3": v3,
+            "v4": v4,
+            "permission": permission
+        }
+        return Response(**self.call_api(params=params, json=data))
+
     def get_db_info(self) -> typing.List[DB]:
         """获取数据库句柄"""
         params = {
@@ -614,8 +626,11 @@ class Bot:
             logger.error(traceback.format_exc())
             logger.error(raw_data)
 
-    def handle(self, events: typing.Union[typing.List[str], str, None] = None, once: bool = False) -> typing.Callable[
-        [typing.Callable], None]:
+    def handle(
+        self,
+        events: typing.Union[typing.List[str], str, None] = None,
+        once: bool = False
+    ) -> typing.Callable[[typing.Callable], None]:
         def wrapper(func):
             listen = self.event_emitter.on if not once else self.event_emitter.once
             if not events:
