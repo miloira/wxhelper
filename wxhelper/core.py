@@ -98,6 +98,7 @@ class Bot:
             return func(*args, **kwargs)
 
     def init_bot(self, bot: "Bot", event: Event) -> None:
+        self.db_info = self.get_db_info()
         self.DATA_SAVE_PATH = bot.info.dataSavePath
         self.WXHELPER_PATH = os.path.join(self.DATA_SAVE_PATH, "wxhelper")
         self.FILE_SAVE_PATH = os.path.join(self.WXHELPER_PATH, "file")
@@ -611,6 +612,21 @@ class Bot:
     @property
     def info(self) -> Account:
         return self.get_self_info()
+
+    def get_contact_by_db(self, wxid: str) -> typing.Union[dict, None]:
+        result = self.exec_sql(self.db_info[0].handle, "select * from Contact where UserName = '%s';" % wxid)
+        fields = result.data.pop(0)
+        for item in result.data:
+            return dict(zip(fields, item))
+
+    def get_head_image_url(self, wxid: str) -> typing.Union[str, None]:
+        result = self.exec_sql(self.db_info[0].handle, "select * from ContactHeadImgUrl where usrName = '%s';" % wxid)
+        if not result.data:
+            return
+
+        fields = result.data.pop(0)
+        for item in result.data:
+            return dict(zip(fields, item))["smallHeadImgUrl"]
 
     def on_event(self, raw_data: bytes) -> None:
         try:
