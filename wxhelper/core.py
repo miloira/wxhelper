@@ -351,7 +351,7 @@ class Bot:
         data = {
             "chatRoomId": room_id
         }
-        return Room(**self.call_api(params=params, json=data))
+        return Room(**self.call_api(params=params, json=data)["data"])
 
     def get_room_members(self, room_id: str) -> RoomMembers:
         """获取群成员列表"""
