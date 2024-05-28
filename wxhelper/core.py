@@ -213,7 +213,7 @@ class Bot:
         }
         return Response(**self.call_api(params=params, json=data))
 
-    def send_room_at(self, room_id: str, wxids: list[str], msg: str) -> Response:
+    def send_room_at(self, room_id: str, wxids: typing.List[str], msg: str) -> Response:
         """发送群at消息"""
         params = {
             "type": "3"
