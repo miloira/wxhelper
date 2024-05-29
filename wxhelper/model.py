@@ -20,6 +20,7 @@ class Event:
     time: typing.Optional[str] = None
     timestamp: typing.Optional[int] = None
     type: typing.Optional[int] = None
+    data: typing.Optional[list] = None
 
 
 @dataclass
